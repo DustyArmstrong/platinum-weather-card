@@ -1813,7 +1813,8 @@ export class PlatinumWeatherCard extends LitElement {
   get slotWind(): TemplateResult {
     const beaufort = this._config.entity_wind_speed && this._config.option_show_beaufort ? html`<div class="slot-text"></div>BFT: ${this.currentBeaufort} -&nbsp;</div>` : "";
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
-    const units = html`<div class="slot-text unit">${this.getUOM('length')}/h</div>`;
+    const unitOfMeasurement = this._config.entity_wind_speed ? this.hass.states[this._config.entity_wind_speed].attributes.unit_of_measurement : '';
+    const units = html`<div class="slot-text unit">${unitOfMeasurement}/h</div>`;
     const speed = this._config.entity_wind_speed ? html`<div class="slot-text">${this.currentWindSpeed}</div>${units}&nbsp;` : "";
     const gust = this._config.entity_wind_gust ? html`<div class="slot-text">(Gust ${this.currentWindGust}</div>${units})` : "";
     return html`
