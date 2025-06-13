@@ -2021,32 +2021,34 @@ export class PlatinumWeatherCard extends LitElement {
       : '---';
   }
 
-  get currentWindSpeed(): string {
-    const entity = this._config.entity_wind_speed;
-    return entity && this.hass.states[entity]
-      ? entity.match('^weather.') === null
-        ? Math.round(Number(this.hass.states[entity].state)).toLocaleString(this.locale)
-        : this.hass.states[entity].attributes.wind_speed !== undefined
-          ? Math.round(Number(this.hass.states[entity].attributes.wind_speed)).toLocaleString(this.locale)
-          : '---'
-      : '---';
+get currentWindSpeed(): string {
+  const entity = this._config.entity_wind_speed;
+  return entity && this.hass.states[entity]
+    ? entity.match('^weather.') === null
+      ? this.formatWindSpeed(this.hass.states[entity].state, this.hass.states[entity].attributes.unit_of_measurement)
+      : this.hass.states[entity].attributes.wind_speed !== undefined
+        ? this.formatWindSpeed(this.hass.states[entity].attributes.wind_speed, this.hass.states[entity].attributes.unit_of_measurement)
+        : '---'
+    : '---';
+}
+
+get currentWindGust(): string {
+  const entity = this._config.entity_wind_gust;
+  return entity && this.hass.states[entity]
+    ? this.formatWindSpeed(this.hass.states[entity].state, this.hass.states[entity].attributes.unit_of_measurement)
+    : '---';
+}
+
+private formatWindSpeed(value: string, unit: string | undefined): string {
+  const speed = Math.round(Number(value));
+  if (unit === 'mph') {
+    return `${speed} mph`;
+  } else if (unit === 'km/h') {
+    return `${speed} km/h`;
+  } else {
+    return `${speed} ---`; // Fallback for unknown units
   }
-
-  get currentWindGust(): string {
-    const entity = this._config.entity_wind_gust;
-
-    //tjl Feature Add - Add capability to get current Wind Gust from weather entity attribute
-    return entity && this.hass.states[entity]
-      ? entity.match('^weather.') === null
-        ? Math.round(Number(this.hass.states[entity].state)).toLocaleString(this.locale)
-        : this.hass.states[entity].attributes.wind_gust_speed !== undefined
-          ? Math.round(Number(this.hass.states[entity].attributes.wind_gust_speed)).toLocaleString(this.locale)
-          : '---'
-      : '---';
-
-  //return entity && this.hass.states[entity]
-  //  ? Math.round(Number(this.hass.states[entity].state)).toLocaleString(this.locale) : '---';
-  }
+}
 
   get currentWindSpeedKt(): string {
     const entity = this._config.entity_wind_speed_kt;
