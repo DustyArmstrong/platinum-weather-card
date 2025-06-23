@@ -1,4 +1,4 @@
-# Platinum Weather Card 
+# Deprecated - please use [Dusty Weather Card](https://github.com/DustyArmstrong/dusty-weather-card)
 
 A highly configurable weather card with a graphical configuration.  Based on original Platinum Weather Card by [@makin-things](https://www.github.com/makin-things)
 
